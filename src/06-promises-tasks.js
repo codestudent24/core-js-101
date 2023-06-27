@@ -28,11 +28,22 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPos) {
+  const prom = new Promise((resolve, reject) => {
+    if (typeof isPos === 'boolean') resolve(isPos);
+    reject(new Error('Wrong parameter is passed! Ask her again.'));
+  });
+  return prom.then((val) => {
+    if (val) return 'Hooray!!! She said "Yes"!';
+    return 'Oh no, she said "No".';
+  }).catch((error) => {
+    throw new Error(error.message);
+  });
+  // console.log(response);
+  //  response;
 }
 
-
+/* eslint-disable */
 /**
  * Return Promise object that should be resolved with array containing plain values.
  * Function receive an array of Promise objects.
@@ -48,8 +59,9 @@ function willYouMarryMe(/* isPositiveAnswer */) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  const res = Promise.all(array).then(values => values);
+  return res;
 }
 
 /**
@@ -71,8 +83,9 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(arr) {
+  const res = Promise.race(arr).then(v => v);
+  return res;
 }
 
 /**
@@ -92,8 +105,24 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
+function chainPromises(arr, act) {
   throw new Error('Not implemented');
+
+  // return arr.reduce((acc, curr) => {
+  //   const res = act (acc, curr.then(data => act(data)));
+  //   console.log(res);
+  //   return res;
+  // })
+
+  // return arr[0].then(data => {
+  //   const aData = act(data);
+  //   return arr[1].then(data2 => {
+  //       const bData = act(aData, data2);
+  //       return arr[2].then(data3 => {
+  //         return act(bData, data3);
+  //       });
+  //   })
+  // });
 }
 
 module.exports = {
