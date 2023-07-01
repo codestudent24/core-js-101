@@ -18,10 +18,10 @@
  *
  * @example
  *    const p1 = willYouMarryMe(true);
- *    p1.then(answer => console.log(answer)) // 'Hooray!!! She said "Yes"!'
+ *    p1.then(answer => (answer)) // 'Hooray!!! She said "Yes"!'
  *
  *    const p2 = willYouMarryMe(false);
- *    p2.then(answer => console.log(answer)) // 'Oh no, she said "No".';
+ *    p2.then(answer => (answer)) // 'Oh no, she said "No".';
  *
  *    const p3 = willYouMarryMe();
  *    p3.then(answer => console.log(answer))
@@ -43,7 +43,6 @@ function willYouMarryMe(isPos) {
   //  response;
 }
 
-/* eslint-disable */
 /**
  * Return Promise object that should be resolved with array containing plain values.
  * Function receive an array of Promise objects.
@@ -60,7 +59,7 @@ function willYouMarryMe(isPos) {
  *
  */
 function processAllPromises(array) {
-  const res = Promise.all(array).then(values => values);
+  const res = Promise.all(array).then((values) => values);
   return res;
 }
 
@@ -84,7 +83,7 @@ function processAllPromises(array) {
  *
  */
 function getFastestPromise(arr) {
-  const res = Promise.race(arr).then(v => v);
+  const res = Promise.race(arr).then((v) => v);
   return res;
 }
 
@@ -105,8 +104,49 @@ function getFastestPromise(arr) {
  *    });
  *
  */
-function chainPromises(arr, act) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  return new Promise((resolve, reject) => {
+    let result = array[0];
+
+    for (let i = 1; i < array.length; i += 1) {
+      result = result
+        .then((value) => array[i]
+          .then((nextValue) => action(value, nextValue)))
+        .catch(() => {});
+    }
+
+    result.then(resolve).catch(reject);
+  });
+  // throw new Error('Not implemented');
+  /*
+  return new Promise((resolve, reject) => {
+    let result = array[0];
+    let count = 1;
+
+    function processPromise(index) {
+      array[index]
+        .then((value) => {
+          result = action(result, value);
+          //console.log(result)
+          count += 1;
+          if (count === array.length) {
+            resolve(result);
+          } else {
+            processPromise(count);
+          }
+        })
+        .catch(() => {
+          count += 1;
+          if (count === array.length) {
+            resolve(result);
+          } else {
+            processPromise(count);
+          }
+        });
+    }
+
+    processPromise(1);
+  }); */
 
   // return arr.reduce((acc, curr) => {
   //   const res = act (acc, curr.then(data => act(data)));

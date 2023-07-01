@@ -108,7 +108,7 @@ function timeSpanToString(a, b) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-  const h = (date.getHours() + 9) % 12;
+  const h = (date.getHours() + 2) % 12;
   const m = date.getMinutes();
   if (h === 0 && m === 0) return 0;
   let delt = Math.abs((60 * h - 11 * m)) * (Math.PI / 360);
